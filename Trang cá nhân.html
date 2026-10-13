@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sờ Sờ — Personal Space</title>
+<style>
+:root{
+ --bg:#070914;--bg2:#0d1020;--card:rgba(18,22,42,.72);--line:rgba(255,255,255,.1);
+ --text:#f7f7fb;--muted:#a7aec4;--p:#8b7cff;--p2:#5ee7ff;--good:#63e6be;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:
+ radial-gradient(circle at 15% 10%,rgba(139,124,255,.18),transparent 28%),
+ radial-gradient(circle at 85% 30%,rgba(94,231,255,.10),transparent 25%),var(--bg);min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 75%)}
+a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:auto;padding:0 22px}
+header{position:sticky;top:0;z-index:20;background:rgba(7,9,20,.68);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+nav{height:70px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;letter-spacing:.5px}.logo span{color:var(--p2)}
+.navlinks{display:flex;gap:22px;color:var(--muted);font-size:14px}.navlinks a:hover{color:white}
+.hero{min-height:650px;display:grid;grid-template-columns:1.3fr .7fr;gap:50px;align-items:center}
+.kicker{color:var(--p2);font-weight:800;letter-spacing:2px;text-transform:uppercase;font-size:12px}
+h1{font-size:clamp(52px,8vw,92px);line-height:.95;margin:16px 0;background:linear-gradient(100deg,#fff,#bdb7ff 55%,#74e9ff);-webkit-background-clip:text;color:transparent}
+.hero p{font-size:18px;line-height:1.8;color:var(--muted);max-width:650px}
+.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.btn{border:1px solid var(--line);padding:12px 18px;border-radius:14px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.05);color:white}
+.btn.primary{background:linear-gradient(135deg,var(--p),#5d7cff);border:0;box-shadow:0 10px 35px rgba(110,95,255,.25)}
+.profile{width:280px;height:280px;border-radius:50%;margin:auto;display:grid;place-items:center;background:linear-gradient(145deg,rgba(139,124,255,.25),rgba(94,231,255,.08));border:1px solid var(--line);box-shadow:0 0 80px rgba(115,100,255,.18);position:relative}
+.profile:after{content:"ẢNH\AĐẠI DIỆN";white-space:pre;text-align:center;color:var(--muted);font-size:13px;letter-spacing:2px}
+.orb{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--p2);top:22px;right:35px;box-shadow:0 0 25px var(--p2)}
+section{padding:70px 0}.section-title{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}.section-title h2{font-size:34px;margin:0}.section-title p{color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:25px;backdrop-filter:blur(15px);box-shadow:0 20px 60px rgba(0,0,0,.16)}
+.profile-info{display:grid;grid-template-columns:130px 1fr;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}.profile-info:last-child{border:0}.muted{color:var(--muted)}
+.goal{display:flex;gap:15px;padding:15px 0;border-bottom:1px solid var(--line)}.goal:last-child{border:0}.emoji{font-size:25px;width:40px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}.stat b{font-size:25px;display:block}.stat span{color:var(--muted);font-size:13px}
+.book-area{display:flex;justify-content:center;padding:25px}.book{width:245px;height:310px;border-radius:7px 18px 18px 7px;background:linear-gradient(145deg,#6557dc,#9a69ff);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:13px 18px 35px rgba(0,0,0,.35),inset 8px 0 rgba(255,255,255,.1);cursor:pointer;transition:.3s;position:relative}.book:hover{transform:translateY(-10px) rotate(-1deg)}.book .bicon{font-size:65px}.book strong{font:700 31px Georgia,serif;margin-top:12px}.book small{color:#ddd;margin-top:8px}.book em{position:absolute;bottom:16px;font-size:11px;color:#ddd}
+.tags{display:flex;flex-wrap:wrap;gap:9px}.tag{padding:9px 12px;border-radius:999px;background:rgba(139,124,255,.11);border:1px solid rgba(139,124,255,.25);color:#d9d4ff}
+footer{text-align:center;padding:45px;color:var(--muted);border-top:1px solid var(--line)}
+.modal{display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);padding:20px;overflow:auto}.modal.show{display:flex;align-items:center;justify-content:center}.modal-box{width:min(780px,100%);max-height:90vh;overflow:auto;background:#11152a;border:1px solid var(--line);border-radius:25px;padding:25px;box-shadow:0 30px 100px #000}.modal-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:18px}.close{width:40px;height:40px;border:0;border-radius:50%;font-size:25px;background:#252a43;color:white;cursor:pointer}input,textarea{width:100%;background:#0b0e1d;border:1px solid var(--line);color:white;border-radius:13px;padding:13px;font:inherit;outline:none}textarea{margin-top:10px;resize:vertical}.entry{margin-top:14px;padding:17px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}.date{font-size:12px;color:var(--muted)}.entry h3{margin:8px 0}.actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+#site{
+    display:none;
+}
+/* ===== THỜI GIAN BIỂU ===== */
+
+.schedule-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:60;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(10px);
+    padding:20px;
+    overflow:auto;
+}
+
+.schedule-modal.show{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.schedule-box{
+    width:min(1100px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#11152a;
+    border:1px solid var(--line);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 30px 100px #000;
+}
+
+.schedule-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    padding-bottom:16px;
+    margin-bottom:20px;
+}
+
+.schedule-head h2{
+    margin:0;
+}
+
+.schedule-table{
+    width:100%;
+    border-collapse:collapse;
+    background:rgba(255,255,255,.025);
+}
+
+.schedule-table th,
+.schedule-table td{
+    border:1px solid var(--line);
+    padding:12px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.schedule-table th{
+    background:rgba(139,124,255,.15);
+    color:white;
+}
+
+.schedule-table td:first-child{
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.schedule-section{
+    margin-top:30px;
+}
+
+.schedule-section h3{
+    margin-bottom:15px;
+    color:var(--p2);
+}
+
+@media(max-width:760px){
+    .schedule-table{
+        font-size:12px;
+    }
+
+    .schedule-table th,
+    .schedule-table td{
+        padding:7px 5px;
+    }
+}
+@media(max-width:760px){.hero{grid-template-columns:1fr;text-align:center;padding-top:55px}.hero p{margin:auto}.profile{width:220px;height:220px}.navlinks{display:none}.grid{grid-template-columns:1fr}.section-title{display:block}.stats{grid-template-columns:1fr}.profile-info{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div id="lockScreen">
+    <div class="lock-box">
+        <div class="lock-icon">🔐</div>
+        <div class="kicker">PRIVATE SPACE · SỜ SỜ</div>
+
+        <h1>Xin chào 👋</h1>
+
+        <p>
+            Đây là không gian cá nhân của Sờ Sờ.<br>
+            Nhập mật khẩu để tiếp tục.
+        </p>
+
+        <input
+            id="passwordInput"
+            type="password"
+            placeholder="Nhập mật khẩu..."
+            onkeydown="if(event.key==='Enter')unlock()"
+        >
+
+        <button class="btn primary" onclick="unlock()">
+            🔓 Mở Personal Space
+        </button>
+
+        <div id="loginError"></div>
+    </div>
+</div>
+
+<div id="site">
+<header><div class="wrap"><nav>
+<a class="logo" href="#home">SỜ SỜ<span> ✦</span></a>
+<div class="navlinks"><a href="#about">Giới thiệu</a><a href="#goals">Mục tiêu</a><a href="#diary">Nhật kí</a><a href="#" onclick="openSchedule(); return false;">⏰ Thời gian biểu</a><a href="#future">Tương lai</a></div>
+</nav></div></header>
+
+<main>
+<div class="wrap">
+<section class="hero" id="home">
+<div>
+<div class="kicker">PERSONAL SPACE · 2026</div>
+<h1>Sờ Sờ.</h1>
+<p>17 tuổi · học sinh lớp 12 · đang từng ngày học hỏi, khám phá công nghệ và xây dựng phiên bản tốt hơn của chính mình.<br><em> "Bạn phải tin vào chính mình!"</em></p>
+<div class="buttons">
+    <a class="btn primary" href="#about">Khám phá mình →</a>
+
+    <a class="btn" href="#diary">
+        📖 Mở nhật kí
+    </a>
+
+    <button class="btn" onclick="openSchedule()">
+        ⏰ Thời gian biểu
+    </button>
+</div>
+<div class="profile"><div class="orb"></div></div>
+</div>
+</section>
+
+<section id="about">
+<div class="section-title"><div><div class="kicker">01 · ABOUT ME</div><h2>Một chút về mình</h2></div></div>
+<div class="grid">
+<div class="card">
+<div class="profile-info"><div class="muted">Tên</div><strong>Sờ Sờ</strong></div>
+<div class="profile-info"><div class="muted">Tuổi</div><strong>17</strong></div>
+<div class="profile-info"><div class="muted">Hiện tại</div><strong>Học sinh lớp 12</strong></div>
+<div class="profile-info"><div class="muted">Tình trạng</div><strong id="relationText">Ế 🙄</strong></div>
+</div>
+<div class="card">
+<h3>⚡ Trạng thái hiện tại</h3>
+<p class="muted">Đang trong giai đoạn tập trung học tập và chuẩn bị cho những bước tiến lớn phía trước.</p>
+<div class="stats"><div class="stat"><b>12</b><span>Lớp học</span></div><div class="stat"><b>17</b><span>Tuổi</span></div><div class="stat"><b>∞</b><span>Ước mơ</span></div></div>
+</div>
+</div>
+</section>
+
+<section id="goals">
+<div class="section-title"><div><div class="kicker">02 · VISION</div><h2>Mục tiêu & ước mơ</h2></div></div>
+<div class="card">
+<div class="goal"><div class="emoji">🏆</div><div><strong>Thủ khoa tổ hợp X06</strong><div class="muted">Mục tiêu học tập lớn nhất hiện tại.</div></div></div>
+<div class="goal"><div class="emoji">🌏</div><div><strong>Du học</strong><div class="muted">Được học tập, trải nghiệm và khám phá thế giới.</div></div></div>
+<div class="goal"><div class="emoji">💰</div><div><strong>Có nhiều tiền 😁</strong><div class="muted">Tự xây dựng năng lực và một tương lai tài chính tốt.</div></div></div>
+<div class="goal"><div class="emoji">🧠</div><div><strong>Kiến thức rộng</strong><div class="muted">Học không chỉ để thi mà còn để hiểu thế giới.</div></div></div>
+<div class="goal"><div class="emoji">💻</div><div><strong>Công nghệ thông tin</strong><div class="muted">Khám phá công nghệ và tạo ra những thứ của riêng mình.</div></div></div>
+</div>
+</section>
+
+<section id="diary">
+<div class="section-title"><div><div class="kicker">03 · PRIVATE</div><h2>Nhật kí</h2><p>Một góc nhỏ chỉ dành cho những điều bạn muốn lưu giữ.</p></div></div>
+<div class="card"><div class="book-area"><div class="book" onclick="openDiary()"><div class="bicon">📖</div><strong>Nhật kí</strong><small>Sờ Sờ</small><em>— BẤM ĐỂ MỞ —</em></div></div></div>
+</section>
+
+<section id="future">
+<div class="section-title"><div><div class="kicker">04 · MORE</div><h2>Còn đang viết tiếp...</h2></div></div>
+<div class="card">
+<p class="muted">Trang cá nhân này sẽ còn được bổ sung thêm nhiều thứ.</p>
+<div class="tags"><span class="tag">📚 Thành tích</span><span class="tag">💻 Dự án</span><span class="tag">🎯 Kế hoạch</span><span class="tag">✨ Sở thích</span><span class="tag">📸 Khoảnh khắc</span><span class="tag">🔗 Liên hệ</span></div>
+</div>
+</section>
+</div>
+</main>
+
+<footer>© 2026 Sờ Sờ · Personal Space · Built for the next chapter ✦</footer>
+
+<div id="modal" class="modal" onclick="if(event.target===this)closeDiary()">
+<div class="modal-box">
+<div class="modal-head"><div><h2>📖 Nhật kí của Sờ Sờ</h2><span class="muted">Mọi thứ được lưu trên trình duyệt của bạn.</span></div><button class="close" onclick="closeDiary()">×</button></div>
+<input id="title" placeholder="Tên trang nhật kí..."><textarea id="text" rows="6" placeholder="Hôm nay mình muốn viết..."></textarea>
+<div class="actions"><button class="btn primary" onclick="saveDiary()">💾 Lưu nhật kí</button><button class="btn" onclick="clearDiary()">Xóa ô viết</button></div>
+<div id="entries"></div>
+</div></div>
+<!-- ===== MODAL THỜI GIAN BIỂU ===== -->
+
+<div id="scheduleModal"
+     class="schedule-modal"
+     onclick="if(event.target===this)closeSchedule()">
+
+    <div class="schedule-box">
+
+        <div class="schedule-head">
+
+            <div>
+                <div class="kicker">MY SCHEDULE · 2026</div>
+                <h2>⏰ Thời gian biểu</h2>
+                <span class="muted">
+                    Lịch học tập và sinh hoạt hằng ngày
+                </span>
+            </div>
+
+            <button class="close" onclick="closeSchedule()">×</button>
+
+        </div>
+
+
+        <!-- BUỔI SÁNG -->
+
+        <div class="schedule-section">
+
+            <h3>🌅 Buổi sáng</h3>
+
+            <table class="schedule-table">
+
+                <tr>
+                    <th>Thời gian</th>
+                    <th>Công việc</th>
+                </tr>
+
+                <tr>
+                    <td>04:50</td>
+                    <td>⏰ Thức dậy, vệ sinh, chuẩn bị</td>
+                </tr>
+
+                <tr>
+                    <td>05:00 – 06:00</td>
+                    <td>🏫 Học trên lớp</td>
+                </tr>
+
+                <tr>
+                    <td>06:00 – 06:35</td>
+                    <td>🚿 Về phòng + vệ sinh cá nhân</td>
+                </tr>
+
+                <tr>
+                    <td>06:35 – 06:45</td>
+                    <td>🍞 Ăn sáng + chuẩn bị</td>
+                </tr>
+
+                <tr>
+                    <td>06:45 – 07:00</td>
+                    <td>📖 Truy bài đầu giờ</td>
+                </tr>
+
+                <tr>
+                    <td>07:00 – 11:15</td>
+                    <td>🏫 Học 5 tiết chính khóa</td>
+                </tr>
+
+                <tr>
+                    <td>11:15 – 11:50</td>
+                    <td>🍚 Ăn trưa</td>
+                </tr>
+
+                <tr>
+                    <td>11:50 – 12:15</td>
+                    <td>🧘 Nghỉ ngơi</td>
+                </tr>
+
+                <tr>
+                    <td>12:15 – 13:15</td>
+                    <td>😴 Ngủ trưa</td>
+                </tr>
+
+                <tr>
+                    <td>13:15 – 13:30</td>
+                    <td>🌱 Thức dậy + chuẩn bị lên lớp</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <!-- BUỔI CHIỀU -->
+
+        <div class="schedule-section">
+
+            <h3>☀️ Buổi chiều</h3>
+
+            <table class="schedule-table">
+
+                <tr>
+                    <th>Thời gian</th>
+                    <th>Công việc</th>
+                </tr>
+
+                <tr>
+                    <td>13:30 – 16:25</td>
+                    <td>🏫 Học 3 tiết: ôn tốt nghiệp + HSG</td>
+                </tr>
+
+                <tr>
+                    <td>16:25 – 17:15</td>
+                    <td>🏃 Thể thao nếu tan học lúc 16:25</td>
+                </tr>
+
+                <tr>
+                    <td>13:30 – 17:15</td>
+                    <td>🏫 Học 4 tiết: ôn tốt nghiệp + HSG</td>
+                </tr>
+
+                <tr>
+                    <td>17:15 – 18:00</td>
+                    <td>🏃 Thể thao nếu tan học lúc 17:15</td>
+                </tr>
+
+                <tr>
+                    <td>18:00 – 18:40</td>
+                    <td>🚿 Tắm + ăn tối + chuẩn bị học</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <!-- BUỔI TỐI -->
+
+        <div class="schedule-section">
+
+            <h3>🌙 Buổi tối</h3>
+
+            <table class="schedule-table">
+
+                <tr>
+                    <th>Thời gian</th>
+                    <th>Nội dung</th>
+                </tr>
+
+                <tr>
+                    <td>19:00 – 19:45</td>
+                    <td>📐 Môn chính 1</td>
+                </tr>
+
+                <tr>
+                    <td>19:45 – 19:55</td>
+                    <td>☕ Nghỉ</td>
+                </tr>
+
+                <tr>
+                    <td>19:55 – 20:40</td>
+                    <td>🔬 Môn chính 2</td>
+                </tr>
+
+                <tr>
+                    <td>20:40 – 20:50</td>
+                    <td>☕ Nghỉ</td>
+                </tr>
+
+                <tr>
+                    <td>20:50 – 21:35</td>
+                    <td>💻 Môn chính 3</td>
+                </tr>
+
+                <tr>
+                    <td>21:35 – 21:45</td>
+                    <td>☕ Nghỉ</td>
+                </tr>
+
+                <tr>
+                    <td>21:45 – 22:15</td>
+                    <td>📖 Môn chính 4 / ôn nhẹ</td>
+                </tr>
+
+                <tr>
+                    <td>22:15 – 22:30</td>
+                    <td>📝 Chữa lỗi + chuẩn bị ngày mai</td>
+                </tr>
+
+                <tr>
+                    <td>22:30</td>
+                    <td>🌙 Kết thúc học + chuẩn bị ngủ</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <!-- PHÂN BỔ MÔN -->
+
+        <div class="schedule-section">
+
+            <h3>🎯 Phân bổ 4 môn trong tuần</h3>
+
+            <table class="schedule-table">
+
+                <tr>
+                    <th>Ngày</th>
+                    <th>19:00 – 19:45</th>
+                    <th>19:55 – 20:40</th>
+                    <th>20:50 – 21:35</th>
+                    <th>21:45 – 22:15</th>
+                </tr>
+
+                <tr>
+                    <td>Thứ 2</td>
+                    <td>📐 Toán</td>
+                    <td>🔬 Lí</td>
+                    <td>💻 Tin</td>
+                    <td>📖 Văn</td>
+                </tr>
+
+                <tr>
+                    <td>Thứ 3</td>
+                    <td>📖 Văn</td>
+                    <td>📐 Toán</td>
+                    <td>🔬 Lí</td>
+                    <td>💻 Tin</td>
+                </tr>
+
+                <tr>
+                    <td>Thứ 4</td>
+                    <td>🔬 Lí</td>
+                    <td>💻 Tin</td>
+                    <td>📐 Toán</td>
+                    <td>📖 Văn</td>
+                </tr>
+
+                <tr>
+                    <td>Thứ 5</td>
+                    <td>💻 Tin</td>
+                    <td>📖 Văn</td>
+                    <td>🔬 Lí</td>
+                    <td>📐 Toán</td>
+                </tr>
+
+                <tr>
+                    <td>Thứ 6</td>
+                    <td>📐 Toán</td>
+                    <td>🔬 Lí</td>
+                    <td>📖 Văn</td>
+                    <td>💻 Tin</td>
+                </tr>
+
+                <tr>
+                    <td>Thứ 7</td>
+                    <td>🔬 Lí</td>
+                    <td>📐 Toán</td>
+                    <td>💻 Tin</td>
+                    <td>📖 Văn</td>
+                </tr>
+
+                <tr>
+                    <td>Chủ nhật</td>
+                    <td colspan="4">
+                        📝 Tổng ôn + làm đề + chữa lỗi + chuẩn bị tuần mới
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+const KEY='so-so-diaries-v2', REL='so-so-relation-v2';
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function get(){return JSON.parse(localStorage.getItem(KEY)||'[]')}
+function render(){
+ const box=document.getElementById('entries'), a=get();
+ box.innerHTML=a.length?a.map(x=>`<article class="entry"><div class="date">${esc(x.date)}</div><h3>${esc(x.title)}</h3><div style="white-space:pre-wrap">${esc(x.text)}</div><div class="actions"><button class="btn" onclick="del(${x.id})">Xóa</button></div></article>`).join(''):'<p class="muted" style="text-align:center;margin-top:25px">Chưa có trang nhật kí nào ✍️</p>';
+}
+function openDiary(){document.getElementById('modal').classList.add('show');render()}
+function closeDiary(){document.getElementById('modal').classList.remove('show')}
+function saveDiary(){
+ const text=document.getElementById('text').value.trim();if(!text){alert('Hãy viết nội dung trước khi lưu nhé!');return}
+ const title=document.getElementById('title').value.trim()||'Một ngày của Sờ Sờ';
+ const a=get();a.unshift({id:Date.now(),title,text,date:new Date().toLocaleString('vi-VN')});localStorage.setItem(KEY,JSON.stringify(a));clearDiary();render()
+}
+function clearDiary(){document.getElementById('title').value='';document.getElementById('text').value=''}
+function del(id){if(confirm('Xóa trang nhật kí này?')){localStorage.setItem(KEY,JSON.stringify(get().filter(x=>x.id!==id)));render()}}
+function loadRel(){document.getElementById('relationText').textContent=localStorage.getItem(REL)||'Độc thân'}
+function openSchedule(){
+    document.getElementById('scheduleModal').classList.add('show');
+}
+
+function closeSchedule(){
+    document.getElementById('scheduleModal').classList.remove('show');
+}
+loadRel();
+const PASSWORD = "MTngoc111@";
+
+function unlock(){
+    const input = document.getElementById("passwordInput").value;
+    const error = document.getElementById("loginError");
+
+    if(input === PASSWORD){
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("site").style.display = "block";
+    }else{
+        error.textContent = "❌ Mật khẩu chưa đúng!";
+        document.getElementById("passwordInput").value = "";
+        document.getElementById("passwordInput").focus();
+    }
+}
+</script>
+</div>
+</body>
+</html>
